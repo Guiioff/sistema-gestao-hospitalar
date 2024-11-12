@@ -3,6 +3,7 @@ package br.com.upe.gestaoconsultasexames.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
+@Table(name = "exames_predicao_ataque_cardiaco" )
 @DiscriminatorValue("PredicaoAtaqueCardiaco")
 @Data
 @AllArgsConstructor
