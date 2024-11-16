@@ -21,18 +21,18 @@ public class ConsultaServiceImpl implements iConsultaService {
 
     @Override
     @Transactional
-    public Consulta criarConsulta(Long pacienteId, Long medicoId, LocalDateTime dataConsulta) {
+    public Long criarConsulta(Long pacienteId, Long medicoId, LocalDateTime dataConsulta) {
         Consulta consulta = new Consulta();
         consulta.setPacienteId(pacienteId);
         consulta.setMedicoId(medicoId);
         consulta.setDataConsulta(dataConsulta);
-        return consultaRepository.save(consulta);
+        return consultaRepository.save(consulta).getId();
     }
 
     @Override
-    public Exame agendarExameParaConsulta(Consulta consulta, String tipoExame) {
+    public Long agendarExameParaConsulta(Consulta consulta, String tipoExame) {
         Exame exame = exameService.criarExame(tipoExame, consulta);
         consulta.getExames().add(exame);
-        return exame;
+        return exame.getId();
     }
 }

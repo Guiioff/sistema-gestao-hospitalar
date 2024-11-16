@@ -16,12 +16,12 @@ public class ConsultaListener {
     @RabbitListener(queues = RabbitMQConfig.CONSULTA_QUEUE)
     public void receberMensagem(CriarConsultaMessage message) {
         try {
-            consultaService.criarConsulta(
+            Long consultaID = consultaService.criarConsulta(
                     message.pacienteId(),
                     message.medicoId(),
                     message.dataConsulta()
             );
-            System.out.println("Consulta criada com sucesso para Paciente ID: " + message.pacienteId());
+            System.out.println("Consulta criada com sucesso! - ID da Consulta: " + consultaID);
         } catch (Exception e) {
             System.err.println("Erro ao processar a mensagem: " + e.getMessage());
         }
