@@ -5,9 +5,9 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,8 @@ import java.util.Map;
 @Entity
 @Table(name = "exames_predicao_ataque_cardiaco")
 @DiscriminatorValue("PredicaoAtaqueCardiaco")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExamePredicaoAtaqueCardiaco extends Exame {
