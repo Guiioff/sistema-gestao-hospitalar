@@ -8,4 +8,5 @@ public interface iConsultaService {
 
     Long criarConsulta(Long pacienteId, Long medicoId, LocalDateTime dataConsulta);
     Long agendarExameParaConsulta(Consulta consulta, String tipoExame);
+    Consulta buscarConsultaPorId(Long consultaId);
 }

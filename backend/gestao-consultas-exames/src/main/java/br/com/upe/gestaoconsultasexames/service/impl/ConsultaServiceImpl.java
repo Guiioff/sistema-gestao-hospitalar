@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +35,11 @@ public class ConsultaServiceImpl implements iConsultaService {
         Exame exame = exameService.criarExame(tipoExame, consulta);
         consulta.getExames().add(exame);
         return exame.getId();
+    }
+
+    @Override
+    public Consulta buscarConsultaPorId(Long consultaId) {
+        Optional<Consulta> consulta = consultaRepository.findById(consultaId);
+        return consulta.orElse(null);
     }
 }
