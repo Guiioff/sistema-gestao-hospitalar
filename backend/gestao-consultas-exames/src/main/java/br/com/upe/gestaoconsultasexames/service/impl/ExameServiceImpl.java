@@ -3,6 +3,7 @@ package br.com.upe.gestaoconsultasexames.service.impl;
 import br.com.upe.gestaoconsultasexames.model.Consulta;
 import br.com.upe.gestaoconsultasexames.model.Exame;
 import br.com.upe.gestaoconsultasexames.model.ExamePredicaoAtaqueCardiaco;
+import br.com.upe.gestaoconsultasexames.model.ExamePredicaoDiabetes;
 import br.com.upe.gestaoconsultasexames.repository.ExameRepository;
 import br.com.upe.gestaoconsultasexames.service.iExameService;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,11 @@ public class ExameServiceImpl implements iExameService {
         Exame exame;
         if ("AtaqueCardiaco".equals(tipoExame)) {
             exame = new ExamePredicaoAtaqueCardiaco();
+        } else if("Diabetes".equals(tipoExame)) {
+            exame = new ExamePredicaoDiabetes();
         } else {
             throw new IllegalArgumentException("Tipo de exame inválido.");
         }
-
         exame.setConsulta(consulta);
         exame.setDataAgendamento(LocalDateTime.now());
         return exameRepository.save(exame);
