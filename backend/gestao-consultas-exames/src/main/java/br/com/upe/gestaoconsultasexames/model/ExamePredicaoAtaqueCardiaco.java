@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "exames_predicao_ataque_cardiaco")
-@DiscriminatorValue("PredicaoAtaqueCardiaco")
+@DiscriminatorValue("ATAQUE_CARDIACO")
 @Getter
 @Setter
 @AllArgsConstructor

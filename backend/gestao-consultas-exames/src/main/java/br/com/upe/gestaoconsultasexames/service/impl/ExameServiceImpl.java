@@ -1,12 +1,9 @@
 package br.com.upe.gestaoconsultasexames.service.impl;
 
-import br.com.upe.gestaoconsultasexames.controller.dto.ExamePredicaoAtaqueCardiacoRequest;
-import br.com.upe.gestaoconsultasexames.controller.dto.ExamePredicaoDiabetesRequest;
 import br.com.upe.gestaoconsultasexames.model.Consulta;
 import br.com.upe.gestaoconsultasexames.model.Exame;
 import br.com.upe.gestaoconsultasexames.model.ExamePredicaoAtaqueCardiaco;
 import br.com.upe.gestaoconsultasexames.model.ExamePredicaoDiabetes;
-import br.com.upe.gestaoconsultasexames.model.enums.TipoExameEnum;
 import br.com.upe.gestaoconsultasexames.repository.ExameRepository;
 import br.com.upe.gestaoconsultasexames.service.iExameService;
 import lombok.RequiredArgsConstructor;
@@ -36,25 +33,26 @@ public class ExameServiceImpl implements iExameService {
         }
         exame.setConsulta(consulta);
         exame.setDataAgendamento(LocalDateTime.now());
+
         return exameRepository.save(exame);
     }
 
     @Override
-    public void realizarExame(Long exameId, Map<String, Object> dados, TipoExameEnum tipoExame) {
+    public void realizarExame(Long exameId, Map<String, Object> dados, String tipoExame) {
         Optional<Exame> exameOptional = exameRepository.findById(exameId);
 
         if (exameOptional.isEmpty()) throw new RuntimeException("EXAME NÃO ENCONTRADO");
 
         Exame exame = exameOptional.get();
 
-        if (!exame.getTipoExame().equals(tipoExame)) {
+        if (!exame.getTipoExameDiscriminador().equals(tipoExame)) {
             throw new RuntimeException("O EXAME SOLICITADO NÃO FOI ESSE");
         }
         enviarParaModeloML(dados, tipoExame);
     }
 
     @Override
-    public void enviarParaModeloML(Map<String, Object> dados, TipoExameEnum tipoExame) {
+    public void enviarParaModeloML(Map<String, Object> dados, String tipoExame) {
 
     }
 }
