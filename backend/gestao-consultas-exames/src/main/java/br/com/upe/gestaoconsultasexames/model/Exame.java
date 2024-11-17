@@ -1,5 +1,6 @@
 package br.com.upe.gestaoconsultasexames.model;
 
+import br.com.upe.gestaoconsultasexames.model.enums.TipoExameEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +24,9 @@ public abstract class Exame {
     @ManyToOne
     @JoinColumn(name = "consulta_id", nullable = false)
     private Consulta consulta;
+
+    @Enumerated(EnumType.STRING)
+    private TipoExameEnum tipoExame;
 
     public abstract Map<String, Object> coletarDadosExame();
 }
