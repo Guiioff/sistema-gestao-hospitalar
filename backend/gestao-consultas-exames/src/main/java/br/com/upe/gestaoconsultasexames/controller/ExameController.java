@@ -19,20 +19,20 @@ public class ExameController {
     @PostMapping("/predicao-ataque-cardiaco")
     @ResponseStatus(HttpStatus.CREATED)
     public void realizarExameAtaqueCardiaco(
-            @PathVariable Long exameId,
+            @RequestParam Long exameId,
             @RequestBody ExamePredicaoAtaqueCardiacoRequest exameRequest) {
 
         Map<String, Object> dados = exameRequest.toMap();
-        exameService.realizarExame(exameId, dados, "ATAQUE_CARDIACO");
+        exameService.realizarExame(exameId, dados, "ExamePredicaoAtaqueCardiaco");
     }
 
     @PostMapping("/predicao-diabetes")
     @ResponseStatus(HttpStatus.CREATED)
     public void realizarExameDiabetes(
-            @PathVariable Long exameId,
+            @RequestParam Long exameId,
             @RequestBody ExamePredicaoDiabetesRequest exameRequest) {
 
         Map<String, Object> dados = exameRequest.toMap();
-        exameService.realizarExame(exameId, dados, "DIABETES");
+        exameService.realizarExame(exameId, dados, "ExamePredicaoDiabetes");
     }
 }
