@@ -22,13 +22,13 @@ public class ExameListener {
         try {
             Consulta consulta = consultaService.buscarConsultaPorId(message.consultaId());
             if (consulta != null) {
-                Exame exame = exameService.criarExame(message.tipoExame(), consulta);
+                Exame exame = consultaService.adicionarExameParaConsulta(consulta, message.tipoExame());
                 System.out.println("Exame criado com sucesso! Exame ID: " + exame.getId());
             } else {
                 System.err.println("Consulta não encontrada! ID da consulta: " + message.consultaId());
             }
         } catch (Exception e) {
-            System.err.println("Erro ao processar o agendamento de exame: " + e.getMessage());
+            System.err.println("Erro ao processar o criação de exame: " + e.getMessage());
         }
     }
 }

@@ -31,15 +31,15 @@ public class ConsultaServiceImpl implements iConsultaService {
     }
 
     @Override
-    public Long agendarExameParaConsulta(Consulta consulta, String tipoExame) {
+    public Exame adicionarExameParaConsulta(Consulta consulta, String tipoExame) {
         Exame exame = exameService.criarExame(tipoExame, consulta);
         consulta.getExames().add(exame);
-        return exame.getId();
+        consultaRepository.save(consulta);
+        return exame;
     }
 
     @Override
     public Consulta buscarConsultaPorId(Long consultaId) {
-        Optional<Consulta> consulta = consultaRepository.findById(consultaId);
-        return consulta.orElse(null);
+        return consultaRepository.findByIdWithExames(consultaId).orElse(null);
     }
 }
