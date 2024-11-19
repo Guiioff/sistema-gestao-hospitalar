@@ -18,7 +18,7 @@ public class UsuarioService {
   private final UsuarioRepository usuarioRepository;
 
   @Transactional
-  private void registrarNovoUsuario(RegistrarUsuarioMensagem mensagem) {
+  public void registrarNovoUsuario(RegistrarUsuarioMensagem mensagem) {
     if (this.usuarioRepository.existsByEmail(mensagem.email())) {
       throw new DadoJaRegistradoException("Já existe um usuário com o email fornecido");
     }
