@@ -11,7 +11,7 @@ import java.time.Instant;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-  @ExceptionHandler
+  @ExceptionHandler(GenericaException.class)
   public ResponseEntity<ErroResponse> handleGenericaException(GenericaException ex) {
     ErroResponse response =
         ErroResponse.builder()
