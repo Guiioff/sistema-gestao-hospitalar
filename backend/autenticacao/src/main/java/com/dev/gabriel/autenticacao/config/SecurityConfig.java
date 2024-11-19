@@ -10,7 +10,9 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
 import java.io.IOException;
@@ -41,5 +43,10 @@ public class SecurityConfig {
     JWK jwk = new RSAKey.Builder(this.publicKey).privateKey(this.privateKey).build();
     ImmutableJWKSet<SecurityContext> jwkSet = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwkSet);
+  }
+
+  @Bean
+  public JwtDecoder jwtDecoder() {
+    return NimbusJwtDecoder.withPublicKey(this.publicKey).build();
   }
 }
