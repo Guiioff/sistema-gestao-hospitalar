@@ -1,4 +1,4 @@
-package com.dev.gabriel.autenticacao.exeption;
+package com.dev.gabriel.autenticacao.exception.handler;
 
 import com.dev.gabriel.autenticacao.dto.response.ErroResponse;
 import com.dev.gabriel.autenticacao.exception.exceptions.GenericaException;
