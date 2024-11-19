@@ -20,6 +20,7 @@ public record ExamePredicaoAtaqueCardiacoRequest(
 ) {
     public Map<String, Object> toMap() {
         Map<String, Object> dados = new HashMap<>();
+        dados.put("tipoExame", "PredicaoAtaqueCardiaco");
         dados.put("idade", idade);
         dados.put("sexo", sexo);
         dados.put("tipoDorToracica", tipoDorToracica);

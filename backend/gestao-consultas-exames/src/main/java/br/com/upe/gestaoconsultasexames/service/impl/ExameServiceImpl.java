@@ -1,5 +1,6 @@
 package br.com.upe.gestaoconsultasexames.service.impl;
 
+import br.com.upe.gestaoconsultasexames.listener.ExameProducer;
 import br.com.upe.gestaoconsultasexames.model.Consulta;
 import br.com.upe.gestaoconsultasexames.model.Exame;
 import br.com.upe.gestaoconsultasexames.model.ExamePredicaoAtaqueCardiaco;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class ExameServiceImpl implements iExameService {
 
     private final ExameRepository exameRepository;
+    private final ExameProducer exameProducer;
 
     @Override
     @Transactional
@@ -53,6 +55,6 @@ public class ExameServiceImpl implements iExameService {
 
     @Override
     public void enviarParaModeloML(Map<String, Object> dados, String tipoExame) {
-
+        exameProducer.enviarDadosParaFila(dados);
     }
 }

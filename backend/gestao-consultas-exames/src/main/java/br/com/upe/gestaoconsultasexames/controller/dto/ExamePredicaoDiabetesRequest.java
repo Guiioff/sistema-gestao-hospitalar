@@ -17,6 +17,7 @@ public record ExamePredicaoDiabetesRequest(
 ) {
     public Map<String, Object> toMap() {
         Map<String, Object> dados = new HashMap<>();
+        dados.put("tipoExame", "PredicaoDiabetes");
         dados.put("idade", idade);
         dados.put("localizacao", localizacao);
         dados.put("raca", raca);

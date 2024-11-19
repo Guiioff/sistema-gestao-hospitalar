@@ -10,6 +10,7 @@ public class RabbitMQConfig {
 
     public static final String CONSULTA_QUEUE = "consulta-queue";
     public static final String EXAME_QUEUE = "exame-queue";
+    public static final String EXAME_DADOS_QUEUE = "exame-dados-queue";
 
     @Bean
     public Queue consultaQueue() {
@@ -19,6 +20,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue exameQueue() {
         return new Queue(EXAME_QUEUE, true);
+    }
+
+    @Bean
+    public Queue exameDadosQueue() {
+        return new Queue(EXAME_DADOS_QUEUE, true);
     }
 
     @Bean
