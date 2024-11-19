@@ -10,12 +10,17 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -38,6 +43,17 @@ public class SecurityConfig {
   public void loadKeys() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
     this.privateKey = (RSAPrivateKey) KeyUtils.decodeKey(this.caminhoChavePrivada);
     this.publicKey = (RSAPublicKey) KeyUtils.decodeKey(this.caminhoChavePublica);
+  }
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+        .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+    return http.build();
   }
 
   @Bean
