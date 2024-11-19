@@ -23,4 +23,19 @@ public class CustomExceptionHandler {
 
     return ResponseEntity.status(ex.getStatus()).body(response);
   }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ErroResponse> handleUnhandledException(Exception ex) {
+    GenericaException genericaException = new GenericaException(ex.getMessage());
+
+    ErroResponse response =
+        ErroResponse.builder()
+            .status(genericaException.getStatus().value())
+            .erro(genericaException.getErro())
+            .detalhe(genericaException.getDetalhe())
+            .timestamp(Instant.now())
+            .build();
+
+    return ResponseEntity.status(genericaException.getStatus()).body(response);
+  }
 }
