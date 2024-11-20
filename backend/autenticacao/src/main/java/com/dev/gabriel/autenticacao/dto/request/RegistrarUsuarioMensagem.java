@@ -8,5 +8,5 @@ public record RegistrarUsuarioMensagem(
     @NotBlank(message = "O email fornecido não pode ser nulo ou estar em branco")
         @Email(message = "O email fornecido tem um formato inválido")
         String email,
-    @NotBlank(message = "A senha fornecida não pode ser nula ou estar em branco") String password,
+    @NotBlank(message = "A senha fornecida não pode ser nula ou estar em branco") String senha,
     @NotBlank(message = "A role fornecida não pode ser nula ou estar em branco") String role) {}

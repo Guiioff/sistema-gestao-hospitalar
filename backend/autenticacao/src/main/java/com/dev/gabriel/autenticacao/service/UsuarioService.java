@@ -47,7 +47,7 @@ public class UsuarioService {
         Usuario.builder()
             .id(usuarioId)
             .email(mensagem.email())
-            .senha(mensagem.password())
+            .senha(mensagem.senha())
             .role(usuarioRole)
             .isBlocked(Boolean.FALSE)
             .build();
