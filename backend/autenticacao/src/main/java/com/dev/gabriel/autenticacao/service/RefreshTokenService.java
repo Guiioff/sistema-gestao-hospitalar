@@ -7,6 +7,7 @@ import com.dev.gabriel.autenticacao.repository.RefreshTokenRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -36,7 +37,7 @@ public class RefreshTokenService {
   }
 
   @Transactional
-  public boolean validarRefreshToken(String token) {
+  public RefreshToken validarRefreshToken(String token) {
     RefreshToken refreshToken =
         this.refreshTokenRepository
             .findByToken(token)
@@ -47,8 +48,8 @@ public class RefreshTokenService {
 
     if (refreshToken.getExpiracao().isBefore(Instant.now())) {
       this.refreshTokenRepository.delete(refreshToken);
-      return false;
+      throw new BadCredentialsException("Refresh token expirado, realize o login novamente");
     }
-    return true;
+    return refreshToken;
   }
 }
