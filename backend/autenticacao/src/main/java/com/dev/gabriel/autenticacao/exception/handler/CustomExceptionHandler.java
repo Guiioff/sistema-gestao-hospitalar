@@ -2,6 +2,7 @@ package com.dev.gabriel.autenticacao.exception.handler;
 
 import com.dev.gabriel.autenticacao.dto.response.ErroResponse;
 import com.dev.gabriel.autenticacao.exception.exceptions.GenericaException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.time.Instant;
 import java.util.List;
 
 @RestControllerAdvice
+@Slf4j
 public class CustomExceptionHandler {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -31,6 +33,7 @@ public class CustomExceptionHandler {
             .timestamp(Instant.now())
             .build();
 
+    log.error("Dados de entrada inválidos. Detalhes: {}", response.detalhe());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
 
@@ -44,6 +47,7 @@ public class CustomExceptionHandler {
             .timestamp(Instant.now())
             .build();
 
+    log.error(ex.getErro() + ". Detalhes: {}", response.detalhe());
     return ResponseEntity.status(ex.getStatus()).body(response);
   }
 
@@ -59,6 +63,7 @@ public class CustomExceptionHandler {
             .timestamp(Instant.now())
             .build();
 
+    log.error("Erro interno do sistema. Detalhes: {}", response.detalhe());
     return ResponseEntity.status(genericaException.getStatus()).body(response);
   }
 }
