@@ -1,5 +1,6 @@
 package com.dev.gabriel.autenticacao.service;
 
+import com.dev.gabriel.autenticacao.exception.exceptions.NaoEncontradoException;
 import com.dev.gabriel.autenticacao.model.entity.RefreshToken;
 import com.dev.gabriel.autenticacao.model.entity.Usuario;
 import com.dev.gabriel.autenticacao.repository.RefreshTokenRepository;
@@ -32,5 +33,22 @@ public class RefreshTokenService {
 
     this.refreshTokenRepository.save(refreshToken);
     return refreshToken.getToken();
+  }
+
+  @Transactional
+  public boolean validarRefreshToken(String token) {
+    RefreshToken refreshToken =
+        this.refreshTokenRepository
+            .findByToken(token)
+            .orElseThrow(
+                () ->
+                    new NaoEncontradoException(
+                        "Refresh token não encontrado, realize o login novamente"));
+
+    if (refreshToken.getExpiracao().isBefore(Instant.now())) {
+      this.refreshTokenRepository.delete(refreshToken);
+      return false;
+    }
+    return true;
   }
 }
