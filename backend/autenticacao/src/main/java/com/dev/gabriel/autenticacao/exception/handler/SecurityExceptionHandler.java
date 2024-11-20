@@ -7,6 +7,8 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
+
 @RestControllerAdvice
 public class SecurityExceptionHandler {
 
@@ -16,7 +18,7 @@ public class SecurityExceptionHandler {
         ErroResponse.builder()
             .status(HttpStatus.UNAUTHORIZED.value())
             .erro("Usuário bloqueado")
-            .detalhe(ex.getMessage())
+            .detalhe(List.of(ex.getMessage()))
             .build();
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
