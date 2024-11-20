@@ -1,12 +1,18 @@
 package com.dev.gabriel.autenticacao.model.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_refresh_token")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RefreshToken {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
