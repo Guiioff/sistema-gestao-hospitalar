@@ -44,12 +44,7 @@ public class RabbitMQConsumer {
   }
 
   private void logarViolacoes(Set<ConstraintViolation<RegistrarUsuarioMensagem>> violations) {
-    violations.forEach(
-        violation ->
-            log.error(
-                "Erro de validação: {} - valor inválido: {}",
-                violation.getMessage(),
-                violation.getInvalidValue()));
+    violations.forEach(violation -> log.error("Erro de validação: {}", violation.getMessage()));
   }
 
   private void rejeitarMensagem(Channel channel, Long deliveryTag) {
