@@ -1,3 +1,5 @@
 /.idea/
 /.mvn/
 /target/
+/private_key.pem
+/public_key.pem
