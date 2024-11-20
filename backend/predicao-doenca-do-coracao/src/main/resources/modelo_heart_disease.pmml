@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
+	<Header>
+		<Application name="SkLearn2PMML package" version="0.111.1"/>
+		<Timestamp>2024-11-08T01:31:33Z</Timestamp>
+	</Header>
+	<MiningBuildTask>
+		<Extension name="repr">PMMLPipeline(steps=[('preprocessamento', ColumnTransformer(transformers=[('num',
+                                 Pipeline(steps=[('scaler', StandardScaler())]),
+                                 Index(['idade', 'tipoDorToracica', 'pressaoSanguineaRepouso',
+       'colesterolSerico', 'resultadosEletrocardiogramaRepouso',
+       'frequenciaCardiacaMaxima', 'depressaoSTInduzida', 'inclinacaoPicoST',
+       'numeroVasosPrincipais'],
+      dtype='object')),
+                                ('cat',
+                                 Pipeline(steps=[('onehot',
+                                                  OneHotEncoder(handle_unknown='ignore'))]),
+                                 Index(['sexo', 'glicemiaJejum', 'anginaInduzida', 'avaliacaoTesteEsforco'], dtype='object'))])),
+       ('modelo', DecisionTreeClassifier(max_depth=3, min_samples_leaf=4, random_state=42))])</Extension>
+	</MiningBuildTask>
+	<DataDictionary>
+		<DataField name="resultado" optype="categorical" dataType="string">
+			<Value value="Doença cardíaca detectada"/>
+			<Value value="Doença cardíaca não detectada"/>
+		</DataField>
+		<DataField name="idade" optype="continuous" dataType="double"/>
+		<DataField name="tipoDorToracica" optype="continuous" dataType="double"/>
+		<DataField name="frequenciaCardiacaMaxima" optype="continuous" dataType="double"/>
+		<DataField name="numeroVasosPrincipais" optype="continuous" dataType="double"/>
+		<DataField name="avaliacaoTesteEsforco" optype="categorical" dataType="string">
+			<Value value="Normal"/>
+			<Value value="Problema irreversível"/>
+			<Value value="Problema reversível"/>
+		</DataField>
+	</DataDictionary>
+	<TreeModel functionName="classification" algorithmName="sklearn.tree._classes.DecisionTreeClassifier" missingValueStrategy="nullPrediction">
+		<MiningSchema>
+			<MiningField name="resultado" usageType="target"/>
+			<MiningField name="avaliacaoTesteEsforco" invalidValueTreatment="asIs"/>
+			<MiningField name="tipoDorToracica"/>
+			<MiningField name="numeroVasosPrincipais"/>
+			<MiningField name="frequenciaCardiacaMaxima"/>
+			<MiningField name="idade"/>
+		</MiningSchema>
+		<Output>
+			<OutputField name="probability(Doença cardíaca detectada)" optype="continuous" dataType="double" feature="probability" value="Doença cardíaca detectada"/>
+			<OutputField name="probability(Doença cardíaca não detectada)" optype="continuous" dataType="double" feature="probability" value="Doença cardíaca não detectada"/>
+		</Output>
+		<LocalTransformations>
+			<DerivedField name="standardScaler(idade)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="idade"/>
+						<Constant dataType="double">54.28125</Constant>
+					</Apply>
+					<Constant dataType="double">9.150351586238953</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standardScaler(tipoDorToracica)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="tipoDorToracica"/>
+						<Constant dataType="double">1.0044642857142858</Constant>
+					</Apply>
+					<Constant dataType="double">1.0022197143677363</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standardScaler(frequenciaCardiacaMaxima)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="frequenciaCardiacaMaxima"/>
+						<Constant dataType="double">150.21875</Constant>
+					</Apply>
+					<Constant dataType="double">22.986047908187697</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standardScaler(numeroVasosPrincipais)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="numeroVasosPrincipais"/>
+						<Constant dataType="double">0.7232142857142857</Constant>
+					</Apply>
+					<Constant dataType="double">1.0107442575061372</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="float(standardScaler(idade))" optype="continuous" dataType="float">
+				<FieldRef field="standardScaler(idade)"/>
+			</DerivedField>
+			<DerivedField name="float(standardScaler(tipoDorToracica))" optype="continuous" dataType="float">
+				<FieldRef field="standardScaler(tipoDorToracica)"/>
+			</DerivedField>
+			<DerivedField name="float(standardScaler(frequenciaCardiacaMaxima))" optype="continuous" dataType="float">
+				<FieldRef field="standardScaler(frequenciaCardiacaMaxima)"/>
+			</DerivedField>
+			<DerivedField name="float(standardScaler(numeroVasosPrincipais))" optype="continuous" dataType="float">
+				<FieldRef field="standardScaler(numeroVasosPrincipais)"/>
+			</DerivedField>
+			<DerivedField name="double(float(standardScaler(tipoDorToracica)))" optype="continuous" dataType="double">
+				<FieldRef field="float(standardScaler(tipoDorToracica))"/>
+			</DerivedField>
+			<DerivedField name="double(float(standardScaler(numeroVasosPrincipais)))" optype="continuous" dataType="double">
+				<FieldRef field="float(standardScaler(numeroVasosPrincipais))"/>
+			</DerivedField>
+			<DerivedField name="double(float(standardScaler(frequenciaCardiacaMaxima)))" optype="continuous" dataType="double">
+				<FieldRef field="float(standardScaler(frequenciaCardiacaMaxima))"/>
+			</DerivedField>
+			<DerivedField name="double(float(standardScaler(idade)))" optype="continuous" dataType="double">
+				<FieldRef field="float(standardScaler(idade))"/>
+			</DerivedField>
+		</LocalTransformations>
+		<Node>
+			<True/>
+			<Node>
+				<SimplePredicate field="avaliacaoTesteEsforco" operator="equal" value="Problema irreversível"/>
+				<Node>
+					<SimplePredicate field="double(float(standardScaler(numeroVasosPrincipais)))" operator="lessOrEqual" value="-0.22084149718284607"/>
+					<Node score="Doença cardíaca detectada" recordCount="1">
+						<SimplePredicate field="double(float(standardScaler(idade)))" operator="lessOrEqual" value="0.5703332722187042"/>
+						<ScoreDistribution value="Doença cardíaca detectada" recordCount="0.9583333333333334"/>
+						<ScoreDistribution value="Doença cardíaca não detectada" recordCount="0.041666666666666664"/>
+					</Node>
+					<Node score="Doença cardíaca detectada" recordCount="1">
+						<True/>
+						<ScoreDistribution value="Doença cardíaca detectada" recordCount="0.6875"/>
+						<ScoreDistribution value="Doença cardíaca não detectada" recordCount="0.3125"/>
+					</Node>
+				</Node>
+				<Node score="Doença cardíaca não detectada" recordCount="1">
+					<SimplePredicate field="double(float(standardScaler(tipoDorToracica)))" operator="lessOrEqual" value="-0.5033469914924353"/>
+					<ScoreDistribution value="Doença cardíaca detectada" recordCount="0.125"/>
+					<ScoreDistribution value="Doença cardíaca não detectada" recordCount="0.875"/>
+				</Node>
+				<Node score="Doença cardíaca detectada" recordCount="1">
+					<True/>
+					<ScoreDistribution value="Doença cardíaca detectada" recordCount="0.7692307692307693"/>
+					<ScoreDistribution value="Doença cardíaca não detectada" recordCount="0.23076923076923078"/>
+				</Node>
+			</Node>
+			<Node>
+				<SimplePredicate field="double(float(standardScaler(tipoDorToracica)))" operator="lessOrEqual" value="-0.5033469914924353"/>
+				<Node score="Doença cardíaca não detectada" recordCount="1">
+					<SimplePredicate field="double(float(standardScaler(numeroVasosPrincipais)))" operator="lessOrEqual" value="-0.22084149718284607"/>
+					<ScoreDistribution value="Doença cardíaca detectada" recordCount="0.25"/>
+					<ScoreDistribution value="Doença cardíaca não detectada" recordCount="0.75"/>
+				</Node>
+				<Node score="Doença cardíaca não detectada" recordCount="1">
+					<True/>
+					<ScoreDistribution value="Doença cardíaca detectada" recordCount="0"/>
+					<ScoreDistribution value="Doença cardíaca não detectada" recordCount="1"/>
+				</Node>
+			</Node>
+			<Node score="Doença cardíaca não detectada" recordCount="1">
+				<SimplePredicate field="double(float(standardScaler(frequenciaCardiacaMaxima)))" operator="lessOrEqual" value="-0.31404919922351837"/>
+				<ScoreDistribution value="Doença cardíaca detectada" recordCount="0.16666666666666666"/>
+				<ScoreDistribution value="Doença cardíaca não detectada" recordCount="0.8333333333333334"/>
+			</Node>
+			<Node score="Doença cardíaca detectada" recordCount="1">
+				<True/>
+				<ScoreDistribution value="Doença cardíaca detectada" recordCount="0.6666666666666666"/>
+				<ScoreDistribution value="Doença cardíaca não detectada" recordCount="0.3333333333333333"/>
+			</Node>
+		</Node>
+	</TreeModel>
+</PMML>
