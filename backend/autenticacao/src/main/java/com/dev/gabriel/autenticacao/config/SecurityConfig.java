@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
   @Value("${security.caminho-chave-privada}")
   private String caminhoChavePrivada;
@@ -39,6 +41,7 @@ public class SecurityConfig {
 
   private RSAPrivateKey privateKey;
   private RSAPublicKey publicKey;
+  private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
   @PostConstruct
   public void loadKeys() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -57,7 +60,7 @@ public class SecurityConfig {
                     .anyRequest()
                     .authenticated())
         .exceptionHandling(
-            handling -> handling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
+            handling -> handling.authenticationEntryPoint(customAuthenticationEntryPoint))
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
