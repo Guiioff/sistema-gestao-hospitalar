@@ -31,7 +31,7 @@ public class RabbitMQConsumer {
       Set<ConstraintViolation<RegistrarUsuarioMensagem>> violations = validator.validate(mensagem);
       if (!violations.isEmpty()) {
         logarViolacoes(violations);
-        rejeitarMensagem(channel, deliveryTag);
+        rejeitarMensagemPermanentemente(channel, deliveryTag);
         return;
       }
 
@@ -39,7 +39,7 @@ public class RabbitMQConsumer {
       channel.basicAck(deliveryTag, false);
     } catch (Exception e) {
       log.error("Erro no processamento da mensagem: {}", e.getMessage());
-      rejeitarMensagem(channel, deliveryTag);
+      rejeitarMensagemTemporariamente(channel, deliveryTag);
     }
   }
 
@@ -47,11 +47,19 @@ public class RabbitMQConsumer {
     violations.forEach(violation -> log.error("Erro de validação: {}", violation.getMessage()));
   }
 
-  private void rejeitarMensagem(Channel channel, Long deliveryTag) {
+  private void rejeitarMensagemPermanentemente(Channel channel, Long deliveryTag) {
     try {
       channel.basicReject(deliveryTag, false);
     } catch (IOException ex) {
-      log.error("Erro ao rejeitar a mensagem: {}", ex.getMessage());
+      log.error("Erro ao rejeitar a mensagem permanentemente: {}", ex.getMessage());
+    }
+  }
+
+  private void rejeitarMensagemTemporariamente(Channel channel, Long deliveryTag) {
+    try {
+      channel.basicNack(deliveryTag, false, true);
+    } catch (IOException ex) {
+      log.error("Erro ao rejeitar a mensagem temporariamente: {}", ex.getMessage());
     }
   }
 }
