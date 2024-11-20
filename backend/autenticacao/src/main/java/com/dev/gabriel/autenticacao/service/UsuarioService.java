@@ -38,7 +38,7 @@ public class UsuarioService {
     RoleUsuario usuarioRole;
 
     try {
-      usuarioRole = RoleUsuario.valueOf(mensagem.role());
+      usuarioRole = RoleUsuario.valueOf(mensagem.role().toUpperCase());
     } catch (IllegalArgumentException ex) {
       throw new DadoInvalidoException("A role fornecida é inválida");
     }
