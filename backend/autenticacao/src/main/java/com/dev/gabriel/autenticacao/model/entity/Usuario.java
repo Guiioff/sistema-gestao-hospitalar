@@ -15,9 +15,7 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode
 public class Usuario {
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+  @Id private UUID id;
 
   @Column(nullable = false, unique = true)
   private String email;
