@@ -1,8 +1,10 @@
 package com.dev.gabriel.autenticacao.service;
 
 import com.dev.gabriel.autenticacao.dto.request.LoginRequest;
+import com.dev.gabriel.autenticacao.dto.request.RefreshTokenRequest;
 import com.dev.gabriel.autenticacao.dto.response.LoginResponse;
 import com.dev.gabriel.autenticacao.exception.exceptions.NaoEncontradoException;
+import com.dev.gabriel.autenticacao.model.entity.RefreshToken;
 import com.dev.gabriel.autenticacao.model.entity.Usuario;
 import com.dev.gabriel.autenticacao.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,21 @@ public class LoginService {
       throw new BadCredentialsException("A senha está incorreta, tente novamente");
     }
 
+    String refreshToken = this.refreshTokenService.gerarRefreshToken(usuario);
+    Jwt jwt = gerarToken(usuario);
+
+    return new LoginResponse(jwt.getTokenValue(), jwt.getExpiresAt(), refreshToken);
+  }
+
+  public LoginResponse refreshToken(RefreshTokenRequest dto) {
+    RefreshToken refreshToken = this.refreshTokenService.validarRefreshToken(dto.refreshToken());
+    Usuario usuario = refreshToken.getUsuario();
+
+    Jwt jwt = gerarToken(usuario);
+    return new LoginResponse(jwt.getTokenValue(), jwt.getExpiresAt(), refreshToken.getToken());
+  }
+
+  private Jwt gerarToken(Usuario usuario) {
     JwtClaimsSet claims =
         JwtClaimsSet.builder()
             .issuer(this.tokenIssuer)
@@ -55,9 +72,6 @@ public class LoginService {
             .claim("role", usuario.getRole())
             .build();
 
-    Jwt jwt = this.jwtEncoder.encode(JwtEncoderParameters.from(claims));
-    String refreshToken = this.refreshTokenService.gerarRefreshToken(usuario);
-
-    return new LoginResponse(jwt.getTokenValue(), jwt.getExpiresAt(), refreshToken);
+    return this.jwtEncoder.encode(JwtEncoderParameters.from(claims));
   }
 }
