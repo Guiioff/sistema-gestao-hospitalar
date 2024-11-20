@@ -24,6 +24,7 @@ public class LoginService {
   private final JwtEncoder jwtEncoder;
   private final UsuarioRepository usuarioRepository;
   private final PasswordEncoder passwordEncoder;
+  private final RefreshTokenService refreshTokenService;
 
   @Value("${security.jwt.token-issuer}")
   private String tokenIssuer;
@@ -55,7 +56,7 @@ public class LoginService {
             .build();
 
     Jwt jwt = this.jwtEncoder.encode(JwtEncoderParameters.from(claims));
-    String refreshToken = "refresh token temporário"; // todo Implementar geração de refresh token
+    String refreshToken = this.refreshTokenService.gerarRefreshToken(usuario);
 
     return new LoginResponse(jwt.getTokenValue(), jwt.getExpiresAt(), refreshToken);
   }
