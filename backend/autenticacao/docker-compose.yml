@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: autenticacao_app
+    ports:
+      - "8088:8088"
+    environment:
+      server_port: 8088
+      datasource_url: jdbc:mysql://mysql:3306/autenticacao
+      datasource_username: root
+      datasource_password: rootpassword
+      caminho_chave_privada: /app/private_key.pem
+      caminho_chave_publica: /app/public_key.pem
+      rabbitmq_host: rabbitmq
+      rabbitmq_port: 5672
+      rabbitmq_username: guest
+      rabbitmq_password: guest
+      rabbitmq_vhost: /
+      rabbitmq_ssl-enabled: false
+      rabbitmq_novo_usuario_queue: fila-novo-usuario
+      jwt.token-issuer: autenticacao-servico
+      jwt.duracao-token-segundos: 3600
+      rabbitmq_acknowledge_mode: manual
+      refresh_token_duracao_segundos: 86400
+      rabbitmq_novo_usuario_dlq: fila-novo-usuario-dlq
+      rabbitmq_exchange_novo_usuario: exchange-novo-usuario
+    volumes:
+      - ./private_key.pem:/app/private_key.pem
+      - ./public_key.pem:/app/public_key.pem
+    depends_on:
+      - mysql
+      - rabbitmq
+    networks:
+      - autenticacao-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: autenticacao_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: autenticacao
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - autenticacao-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: autenticacao_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - autenticacao-network
+
+volumes:
+  mysql_data:
+
+networks:
+  autenticacao-network:
