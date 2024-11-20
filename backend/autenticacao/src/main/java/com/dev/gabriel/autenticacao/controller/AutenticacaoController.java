@@ -1,6 +1,7 @@
 package com.dev.gabriel.autenticacao.controller;
 
 import com.dev.gabriel.autenticacao.dto.request.LoginRequest;
+import com.dev.gabriel.autenticacao.dto.request.RefreshTokenRequest;
 import com.dev.gabriel.autenticacao.dto.response.LoginResponse;
 import com.dev.gabriel.autenticacao.service.LoginService;
 import jakarta.validation.Valid;
@@ -21,6 +22,12 @@ public class AutenticacaoController {
   @PostMapping("/login")
   public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest dto) {
     LoginResponse response = this.loginService.login(dto);
+    return ResponseEntity.status(HttpStatus.OK).body(response);
+  }
+
+  @PostMapping("/refresh-token")
+  public ResponseEntity<LoginResponse> refreshToken(@RequestBody @Valid RefreshTokenRequest dto) {
+    LoginResponse response = this.loginService.refreshToken(dto);
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 }
