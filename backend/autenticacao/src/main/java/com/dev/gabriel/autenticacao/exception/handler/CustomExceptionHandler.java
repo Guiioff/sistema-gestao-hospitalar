@@ -50,20 +50,4 @@ public class CustomExceptionHandler {
     log.error(ex.getErro() + ". Detalhes: {}", response.detalhe());
     return ResponseEntity.status(ex.getStatus()).body(response);
   }
-
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErroResponse> handleUnhandledException(Exception ex) {
-    GenericaException genericaException = new GenericaException(ex.getMessage());
-
-    ErroResponse response =
-        ErroResponse.builder()
-            .status(genericaException.getStatus().value())
-            .erro(genericaException.getErro())
-            .detalhe(List.of(genericaException.getDetalhe()))
-            .timestamp(Instant.now())
-            .build();
-
-    log.error("Erro interno do sistema. Detalhes: {}", response.detalhe());
-    return ResponseEntity.status(genericaException.getStatus()).body(response);
-  }
 }
