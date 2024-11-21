@@ -31,7 +31,7 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
     if (cabecalhoAuth != null && cabecalhoAuth.startsWith("Bearer ")) {
       return cabecalhoAuth.substring(7);
     } else {
-      throw new RuntimeException("Token de autenticação inválido ou inexistente");
+      throw new TokenException("Token de autenticação inválido ou inexistente");
     }
   }
 
