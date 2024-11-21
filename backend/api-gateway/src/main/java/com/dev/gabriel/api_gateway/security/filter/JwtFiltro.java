@@ -1,6 +1,7 @@
 package com.dev.gabriel.api_gateway.security.filter;
 
 import com.dev.gabriel.api_gateway.exception.exceptions.TokenException;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -54,6 +55,7 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
 
   @Getter
   @Setter
+  @AllArgsConstructor
   public static class Config {
     private String roleExigida;
   }
