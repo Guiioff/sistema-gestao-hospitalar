@@ -1,5 +1,7 @@
 package com.dev.gabriel.api_gateway.security.filter;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.stereotype.Component;
@@ -26,5 +28,9 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
     }
   }
 
-  public static class Config {}
+  @Getter
+  @Setter
+  public static class Config {
+    private String roleExigida;
+  }
 }
