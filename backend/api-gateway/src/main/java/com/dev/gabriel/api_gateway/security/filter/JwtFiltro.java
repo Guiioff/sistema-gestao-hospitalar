@@ -1,17 +1,24 @@
 package com.dev.gabriel.api_gateway.security.filter;
 
+import com.dev.gabriel.api_gateway.exception.exceptions.TokenException;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 @Component
 public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
+  private final JwtDecoder jwtDecoder;
 
-  public JwtFiltro() {
+  public JwtFiltro(JwtDecoder jwtDecoder) {
     super(Config.class);
+    this.jwtDecoder = jwtDecoder;
   }
 
   @Override
@@ -25,6 +32,16 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
       return cabecalhoAuth.substring(7);
     } else {
       throw new RuntimeException("Token de autenticação inválido ou inexistente");
+    }
+  }
+
+  private boolean validarRole(String token, String roleExigida) {
+    try {
+      Jwt jwt = this.jwtDecoder.decode(token);
+      String role = jwt.getClaim("role");
+      return roleExigida.equals(role);
+    } catch (JwtException ex) {
+      throw new TokenException("Erro ao validar a role do usuário");
     }
   }
 
