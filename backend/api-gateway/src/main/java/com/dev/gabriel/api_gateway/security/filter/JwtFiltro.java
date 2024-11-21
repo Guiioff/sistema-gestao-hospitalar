@@ -2,10 +2,10 @@ package com.dev.gabriel.api_gateway.security.filter;
 
 import com.dev.gabriel.api_gateway.exception.exceptions.TokenException;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -23,7 +23,14 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
 
   @Override
   public GatewayFilter apply(Config config) {
-    return null;
+    return (exchange, chain) -> {
+      String token = extrairToken(exchange);
+      if (!validarRole(token, config.getRoleExigida())) {
+        exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+        return exchange.getResponse().setComplete();
+      }
+      return chain.filter(exchange);
+    };
   }
 
   private String extrairToken(ServerWebExchange exchange) {
