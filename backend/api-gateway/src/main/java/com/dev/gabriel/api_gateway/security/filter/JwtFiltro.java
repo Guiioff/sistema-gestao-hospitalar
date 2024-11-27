@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
+import java.util.List;
+
 @Component
 public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
   private final JwtDecoder jwtDecoder;
@@ -50,6 +52,16 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
       return roleExigida.equals(role);
     } catch (JwtException ex) {
       throw new TokenException("Erro ao validar a role do usuário");
+    }
+  }
+
+  private void validarRole(Jwt jwt, List<String> rolesExigidas) {
+    String rolesUsuario = jwt.getClaim("role");
+    if (rolesUsuario == null || rolesUsuario.isEmpty()) {
+      throw new TokenException("Role do usuário não foi encontrada no token");
+    }
+    if (rolesExigidas.contains(rolesUsuario)) {
+      throw new TokenException("Usuário não possui a role exigida para acessar este recurso");
     }
   }
 
