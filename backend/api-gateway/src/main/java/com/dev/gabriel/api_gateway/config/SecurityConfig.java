@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
 import java.io.IOException;
@@ -15,6 +16,9 @@ import java.security.spec.InvalidKeySpecException;
 
 @Configuration
 public class SecurityConfig {
+  @Value("${jwt.token-issuer}")
+  private String tokenIssuer;
+
   @Value("${security.caminho-chave-publica}")
   private String caminhoChavePublica;
 
@@ -27,6 +31,8 @@ public class SecurityConfig {
 
   @Bean
   public JwtDecoder jwtDecoder() {
-    return NimbusJwtDecoder.withPublicKey(this.publicKey).build();
+    NimbusJwtDecoder decoder = NimbusJwtDecoder.withPublicKey(this.publicKey).build();
+    decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(this.tokenIssuer));
+    return decoder;
   }
 }
