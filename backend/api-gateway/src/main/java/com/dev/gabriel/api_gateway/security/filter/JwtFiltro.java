@@ -28,12 +28,14 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
   @Override
   public GatewayFilter apply(Config config) {
     return (exchange, chain) -> {
-      String token = extrairToken(exchange);
-      if (!validarRole(token, config.getRoleExigida())) {
+      try {
+        String token = extrairToken(exchange);
+        validarToken(token, config.rolesExigidas);
+        return chain.filter(exchange);
+      } catch (TokenException ex) {
         exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
         return exchange.getResponse().setComplete();
       }
-      return chain.filter(exchange);
     };
   }
 
@@ -46,13 +48,13 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
     }
   }
 
-  private boolean validarRole(String token, String roleExigida) {
+  private void validarToken(String token, List<String> rolesExigidas) {
     try {
       Jwt jwt = this.jwtDecoder.decode(token);
-      String role = jwt.getClaim("role");
-      return roleExigida.equals(role);
-    } catch (JwtException ex) {
-      throw new TokenException("Erro ao validar a role do usuário");
+      verificarExpiracao(jwt);
+      validarRole(jwt, rolesExigidas);
+    } catch (JwtException e) {
+      throw new TokenException("Erro ao validar o token de autenticação: " + e.getMessage());
     }
   }
 
@@ -76,6 +78,6 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
   @Setter
   @AllArgsConstructor
   public static class Config {
-    private String roleExigida;
+    private List<String> rolesExigidas;
   }
 }
