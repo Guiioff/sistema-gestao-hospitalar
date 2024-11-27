@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -52,6 +53,12 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
       return roleExigida.equals(role);
     } catch (JwtException ex) {
       throw new TokenException("Erro ao validar a role do usuário");
+    }
+  }
+
+  private void verificarExpiracao(Jwt jwt) {
+    if (jwt.getExpiresAt() == null || Instant.now().isAfter(jwt.getExpiresAt())) {
+      throw new TokenException("O token de autenticação está expirado");
     }
   }
 
