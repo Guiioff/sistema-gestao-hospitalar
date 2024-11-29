@@ -15,6 +15,7 @@ import org.springframework.web.server.ServerWebExchange;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
@@ -40,12 +41,10 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
   }
 
   private String extrairToken(ServerWebExchange exchange) {
-    String cabecalhoAuth = exchange.getRequest().getHeaders().getFirst("Authorization");
-    if (cabecalhoAuth != null && cabecalhoAuth.startsWith("Bearer ")) {
-      return cabecalhoAuth.substring(7);
-    } else {
-      throw new TokenException("Token de autenticação inválido ou inexistente");
-    }
+    return Optional.of(exchange.getRequest().getHeaders().getFirst("Authorization"))
+        .filter(cabecalho -> cabecalho.startsWith("Bearer "))
+        .map(cabecalho -> cabecalho.substring(7))
+        .orElseThrow(() -> new TokenException("Token de autenticação inválido ou inexistente"));
   }
 
   private void validarToken(String token, List<String> rolesExigidas) {
@@ -69,7 +68,7 @@ public class JwtFiltro extends AbstractGatewayFilterFactory<JwtFiltro.Config> {
     if (rolesUsuario == null || rolesUsuario.isEmpty()) {
       throw new TokenException("Role do usuário não foi encontrada no token");
     }
-    if (rolesExigidas.contains(rolesUsuario)) {
+    if (!rolesExigidas.contains(rolesUsuario)) {
       throw new TokenException("Usuário não possui a role exigida para acessar este recurso");
     }
   }
