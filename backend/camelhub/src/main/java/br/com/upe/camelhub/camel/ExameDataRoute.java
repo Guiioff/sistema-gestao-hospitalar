@@ -31,11 +31,17 @@ public class ExameDataRoute extends RouteBuilder {
                         .log("Exame de Predição de Ataque Cardíaco")
                         .process(new RemoveTipoExameProcessor())
                         .log("Novo JSON: ${body}")
+                        .setHeader("Content-Type", constant("application/json"))
+                        .toD(urlCoracao + "/api/coracao/predict")
+                        .log("Resposta do servidor (Ataque Cardíaco): ${body}")
 
                     .when(simple("${body[tipoExame]} == 'PredicaoDiabetes'"))
                         .log("Exame de Predição de Diabetes")
                         .process(new RemoveTipoExameProcessor())
                         .log("Novo JSON: ${body}")
+                        .setHeader("Content-Type", constant("application/json"))
+                        .toD(urlDiabetes + "/predict")
+                        .log("Resposta do servidor (Diabetes): ${body}")
 
                     .otherwise()
                         .log("Exame desconhecido")
