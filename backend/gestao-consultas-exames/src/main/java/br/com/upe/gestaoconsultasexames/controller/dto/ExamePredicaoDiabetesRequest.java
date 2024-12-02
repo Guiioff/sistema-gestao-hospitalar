@@ -18,16 +18,16 @@ public record ExamePredicaoDiabetesRequest(
     public Map<String, Object> toMap() {
         Map<String, Object> dados = new HashMap<>();
         dados.put("tipoExame", "PredicaoDiabetes");
-        dados.put("idade", idade);
-        dados.put("localizacao", localizacao);
-        dados.put("raca", raca);
-        dados.put("imc", imc);
+        dados.put("age", idade);
+        dados.put("location", localizacao);
+        dados.put("race", raca);
+        dados.put("bmi", imc);
         dados.put("hba1c", hba1c);
-        dados.put("glicoseSanguinea", glicoseSanguinea);
-        dados.put("genero", genero);
-        dados.put("historicoTabagismo", historicoTabagismo);
-        dados.put("hipertensao", hipertensao);
-        dados.put("doencaCardiaca", doencaCardiaca);
+        dados.put("blood_glucose", glicoseSanguinea);
+        dados.put("gender", genero);
+        dados.put("smoking_history", historicoTabagismo);
+        dados.put("hypertension", hipertensao);
+        dados.put("heart_disease", doencaCardiaca);
         return dados;
     }
 }
