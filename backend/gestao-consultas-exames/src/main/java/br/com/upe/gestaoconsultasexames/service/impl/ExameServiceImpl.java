@@ -46,10 +46,14 @@ public class ExameServiceImpl implements iExameService {
         if (exameOptional.isEmpty()) throw new RuntimeException("EXAME NÃO ENCONTRADO");
 
         Exame exame = exameOptional.get();
+        Consulta consulta = exame.getConsulta();
 
         if (!exame.getTipoExameDiscriminador().equals(tipoExame)) {
             throw new RuntimeException("O EXAME SOLICITADO NÃO FOI ESSE");
         }
+
+        dados.put("pacienteId", consulta.getPacienteId());
+        
         enviarParaModeloML(dados, tipoExame);
     }
 

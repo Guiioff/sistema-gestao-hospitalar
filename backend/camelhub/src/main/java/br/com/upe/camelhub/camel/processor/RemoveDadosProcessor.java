@@ -6,7 +6,7 @@ import org.apache.camel.Processor;
 
 import java.util.Map;
 
-public class RemoveTipoExameProcessor implements Processor {
+public class RemoveDadosProcessor implements Processor {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -15,6 +15,7 @@ public class RemoveTipoExameProcessor implements Processor {
 
         Map<String, Object> body = exchange.getIn().getBody(Map.class);
         body.remove("tipoExame");
+        body.remove("pacienteId");
 
         String newJson = objectMapper.writeValueAsString(body);
         exchange.getIn().setBody(newJson);
