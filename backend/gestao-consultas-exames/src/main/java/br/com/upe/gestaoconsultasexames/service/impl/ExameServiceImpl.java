@@ -53,6 +53,7 @@ public class ExameServiceImpl implements iExameService {
         }
 
         dados.put("pacienteId", consulta.getPacienteId());
+        dados.put("exameId", exameId);
         
         enviarParaModeloML(dados, tipoExame);
     }
