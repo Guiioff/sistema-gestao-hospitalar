@@ -28,8 +28,8 @@ public class ExameDataRoute extends RouteBuilder {
                 .routeId("rabbitmq-exame-dados-consumer-route")
                 .unmarshal().json()
 
-                .setHeader("pacienteId", simple("${body[pacienteId]}"))
-                .setHeader("exameId", simple("${body[exameId]}"))
+                .setHeader("pacienteId", simple("${body[pacienteId]}", Integer.class))
+                .setHeader("exameId", simple("${body[exameId]}", Integer.class))
 
                 .choice()
                     .when(simple("${body[tipoExame]} == 'PredicaoAtaqueCardiaco'"))
@@ -42,7 +42,7 @@ public class ExameDataRoute extends RouteBuilder {
                         .log("Resposta do serviço (Ataque Cardíaco): ${body}")
 
                         .unmarshal().json()
-                        .setBody(simple("{\"resposta\": ${body[predicao]}, \"paciente_id\": \"${header.pacienteId}\", \"exame_id\": \"${header.exameId}\"}"))
+                        .setBody(simple("{\"resposta\": \"${body[predicao]}\", \"paciente_id\": ${header.pacienteId}, \"exame_id\": ${header.exameId}}"))
                         .log("Novo JSON com resposta e pacienteId: ${body}")
 
                     .when(simple("${body[tipoExame]} == 'PredicaoDiabetes'"))
@@ -55,7 +55,7 @@ public class ExameDataRoute extends RouteBuilder {
                         .log("Resposta do serviço (Diabetes): ${body}")
 
                         .unmarshal().json()
-                        .setBody(simple("{\"resposta\": ${body[prediction]}, \"paciente_id\": \"${header.pacienteId}\", \"exame_id\": \"${header.exameId}\"}"))
+                        .setBody(simple("{\"resposta\": \"${body[prediction]}\", \"paciente_id\": ${header.pacienteId}, \"exame_id\": ${header.exameId}}"))
                         .log("Novo JSON com resposta e pacienteId: ${body}")
 
                     .otherwise()
