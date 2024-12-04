@@ -29,7 +29,7 @@ public class PacienteController {
     }
 
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<Paciente> buscarPacientePorCpf(@PathVariable String cpf){
+    public ResponseEntity<Paciente> buscarPacientePorCpf(@PathVariable Long cpf){
         return pacienteService.buscarPorCpf(cpf)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

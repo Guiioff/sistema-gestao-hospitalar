@@ -29,7 +29,7 @@ public class MedicoController {
     }
 
     @GetMapping("/crm/{crm}")
-    public ResponseEntity<Medico> buscarMedicoPorCrm(@PathVariable String crm){
+    public ResponseEntity<Medico> buscarMedicoPorCrm(@PathVariable Long crm){
         return medicoService.buscarPorCrm(crm)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

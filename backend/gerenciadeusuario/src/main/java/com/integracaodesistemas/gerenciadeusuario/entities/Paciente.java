@@ -23,7 +23,7 @@ public class Paciente implements Serializable {
 
   private String nome;
   private LocalDate dataNascimento;
-  private String cpf;
+  private Long cpf;
   private String email;
   private String senha;
   private String endereco;

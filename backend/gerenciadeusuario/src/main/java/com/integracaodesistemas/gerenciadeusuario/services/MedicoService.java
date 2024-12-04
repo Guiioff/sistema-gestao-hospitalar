@@ -25,7 +25,7 @@ public class MedicoService {
     return medicoRepository.findById(id);
   }
 
-  public Optional<Medico> buscarPorCrm(String crm) {
+  public Optional<Medico> buscarPorCrm(Long crm) {
     return medicoRepository.findByCrm(crm);
   }
 

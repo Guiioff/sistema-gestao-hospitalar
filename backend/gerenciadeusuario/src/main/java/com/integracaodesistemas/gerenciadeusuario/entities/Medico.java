@@ -21,7 +21,7 @@ public class Medico implements Serializable {
   private UUID id;
 
   private String nome;
-  private String crm;
+  private Long crm;
   private String telefone;
   private String email;
   private String senha;

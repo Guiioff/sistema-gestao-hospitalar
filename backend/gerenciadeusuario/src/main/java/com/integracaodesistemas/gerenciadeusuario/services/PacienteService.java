@@ -25,7 +25,7 @@ public class PacienteService {
     return pacienteRepository.findById(id);
   }
 
-  public Optional<Paciente> buscarPorCpf(String cpf) {
+  public Optional<Paciente> buscarPorCpf(Long cpf) {
     return pacienteRepository.findByCpf(cpf);
   }
 
