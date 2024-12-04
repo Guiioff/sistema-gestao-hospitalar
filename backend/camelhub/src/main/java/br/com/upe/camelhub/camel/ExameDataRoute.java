@@ -16,6 +16,9 @@ public class ExameDataRoute extends RouteBuilder {
     @Value("${url.predicao.diabetes}")
     private String urlDiabetes;
 
+    @Value("${url.resultados}")
+    private String urlResultados;
+
     @Override
     public void configure() throws Exception {
         from("spring-rabbitmq:gestao-consultas-exames-exchange"
@@ -46,6 +49,9 @@ public class ExameDataRoute extends RouteBuilder {
                         .setBody(simple("{\"resposta\": \"${body[predicao]}\", \"paciente_id\": ${header.pacienteId}, \"exame_id\": ${header.exameId}, \"medico_id\": ${header.medicoId}}"))
                         .log("Novo JSON com resposta e pacienteId: ${body}")
 
+                        .setHeader("Content-Type", constant("application/json"))
+                        .toD(urlResultados + "/api/resultados")
+
                     .when(simple("${body[tipoExame]} == 'PredicaoDiabetes'"))
                         .log("Exame de Predição de Diabetes")
                         .process(new RemoveDadosProcessor())
@@ -58,6 +64,9 @@ public class ExameDataRoute extends RouteBuilder {
                         .unmarshal().json()
                         .setBody(simple("{\"resposta\": \"${body[prediction]}\", \"paciente_id\": ${header.pacienteId}, \"exame_id\": ${header.exameId}, \"medico_id\": ${header.medicoId}}"))
                         .log("Novo JSON com resposta e pacienteId: ${body}")
+
+                        .setHeader("Content-Type", constant("application/json"))
+                        .toD(urlResultados + "/api/resultados")
 
                     .otherwise()
                         .log("Exame desconhecido")
