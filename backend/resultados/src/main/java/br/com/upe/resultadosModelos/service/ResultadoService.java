@@ -24,6 +24,7 @@ public class ResultadoService {
         resultado.setPacienteId(resultadoDTO.getPacienteId());
         resultado.setExameId(resultadoDTO.getExameId());
         resultado.setResultado(resultadoDTO.getResultado());
+        resultado.setTipoExame(resultadoDTO.getTipoExame());
 
        
         return repository.save(resultado);
