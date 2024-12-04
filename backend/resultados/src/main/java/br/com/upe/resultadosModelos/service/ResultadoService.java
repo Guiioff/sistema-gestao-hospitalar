@@ -1,13 +1,16 @@
 package br.com.upe.resultadosModelos.service;
 
 import br.com.upe.resultadosModelos.entity.Resultado;
+import br.com.upe.resultadosModelos.listener.ResultadosProducer;
 import br.com.upe.resultadosModelos.repository.ResultadoRepository;
 
 import br.com.upe.resultadosModelos.dto.ResultadoDTO;
 
-import org.apache.camel.ProducerTemplate;
+import java.util.Map;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,10 +20,7 @@ public class ResultadoService {
     private ResultadoRepository repository;
     
     @Autowired
-    private ProducerTemplate producerTemplate;
-
-    @Value("${rabbitmq.queue.resultados}")
-    private String resultadosQueue;
+    private ResultadosProducer resultadoProducer;
 
     public Resultado salvarResultado(ResultadoDTO resultadoDTO) {
         validarResultadoDTO(resultadoDTO);
@@ -40,7 +40,9 @@ public class ResultadoService {
         resultado.setTipoExame(resultadoDTO.getTipoExame());
 
         Resultado resultadoSalvo = repository.save(resultado);
-        producerTemplate.sendBody("rabbitmq://" + resultadosQueue, resultadoSalvo);
+        
+        enviarParaFila(resultadoSalvo);
+
         
         return resultadoSalvo;
 
@@ -71,5 +73,15 @@ public class ResultadoService {
                 return "Exame desconhecido";
         }
         return "Resultado inválido";
+    }
+    
+    public void enviarParaFila(Resultado resultado) {
+        Map<String, Object> dados = Map.of(
+                "pacienteId", resultado.getPacienteId(),
+                "exameId", resultado.getExameId(),
+                "resultado", resultado.getResultado(),
+                "tipoExame", resultado.getTipoExame()
+        );
+        resultadoProducer.enviarResultadoParaFila(dados); 
     }
 }
