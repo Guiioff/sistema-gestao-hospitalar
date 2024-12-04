@@ -15,6 +15,9 @@ public class ResultadoService {
     public Resultado salvarResultado(ResultadoDTO resultadoDTO) {
         validarResultadoDTO(resultadoDTO);
 
+        if (repository.existsByExameIdAndPacienteId(resultadoDTO.getExameId(), resultadoDTO.getPacienteId())) {
+            throw new IllegalArgumentException("Já existe um resultado para este exame e paciente.");
+        }
     
         String resultadoTraduzido = traduzirResultado(resultadoDTO.getTipoExame(), resultadoDTO.getResultado());
         resultadoDTO.setResultado(resultadoTraduzido);

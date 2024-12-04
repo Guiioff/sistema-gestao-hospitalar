@@ -26,7 +26,7 @@ public class Resultado {
     private String resultado;
 
     @Column(nullable = false)
-    private Long PacienteId;
+    private Long pacienteId;
     
     @Column(nullable = false)
     private String tipoExame;
