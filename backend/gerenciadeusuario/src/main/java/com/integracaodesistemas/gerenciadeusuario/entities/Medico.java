@@ -21,4 +21,5 @@ public class Medico implements Serializable {
     private String nome;
     private String crm;
     private String telefone;
+    private String email;
 }
