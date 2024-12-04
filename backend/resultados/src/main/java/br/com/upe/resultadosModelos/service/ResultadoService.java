@@ -2,8 +2,12 @@ package br.com.upe.resultadosModelos.service;
 
 import br.com.upe.resultadosModelos.entity.Resultado;
 import br.com.upe.resultadosModelos.repository.ResultadoRepository;
+
 import br.com.upe.resultadosModelos.dto.ResultadoDTO;
+
+import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +15,12 @@ public class ResultadoService {
 
     @Autowired
     private ResultadoRepository repository;
+    
+    @Autowired
+    private ProducerTemplate producerTemplate;
+
+    @Value("${rabbitmq.queue.resultados}")
+    private String resultadosQueue;
 
     public Resultado salvarResultado(ResultadoDTO resultadoDTO) {
         validarResultadoDTO(resultadoDTO);
@@ -29,8 +39,11 @@ public class ResultadoService {
         resultado.setResultado(resultadoDTO.getResultado());
         resultado.setTipoExame(resultadoDTO.getTipoExame());
 
-       
-        return repository.save(resultado);
+        Resultado resultadoSalvo = repository.save(resultado);
+        producerTemplate.sendBody("rabbitmq://" + resultadosQueue, resultadoSalvo);
+        
+        return resultadoSalvo;
+
     }
 
     private void validarResultadoDTO(ResultadoDTO resultadoDTO) {
