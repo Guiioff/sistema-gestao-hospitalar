@@ -29,6 +29,9 @@ public class Resultado {
     private Long pacienteId;
     
     @Column(nullable = false)
+    private Long medicoId;
+    
+    @Column(nullable = false)
     private String tipoExame;
 
  

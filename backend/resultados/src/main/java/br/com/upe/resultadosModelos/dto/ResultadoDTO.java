@@ -16,5 +16,7 @@ public class ResultadoDTO {
     private String resultado;
 
     private Long pacienteId;
+    private Long medicoId;
     private String tipoExame;
+	
 }
