@@ -34,6 +34,7 @@ public class ExameDataRoute extends RouteBuilder {
                 .setHeader("pacienteId", simple("${body[pacienteId]}", Integer.class))
                 .setHeader("exameId", simple("${body[exameId]}", Integer.class))
                 .setHeader("medicoId", simple("${body[medicoId]}", Integer.class))
+                .setHeader("tipoExame", simple("${body[tipoExame]}"))
 
                 .choice()
                     .when(simple("${body[tipoExame]} == 'PredicaoAtaqueCardiaco'"))
@@ -46,7 +47,7 @@ public class ExameDataRoute extends RouteBuilder {
                         .log("Resposta do serviço (Ataque Cardíaco): ${body}")
 
                         .unmarshal().json()
-                        .setBody(simple("{\"resposta\": \"${body[predicao]}\", \"paciente_id\": ${header.pacienteId}, \"exame_id\": ${header.exameId}, \"medico_id\": ${header.medicoId}}"))
+                        .setBody(simple("{\"prediction\": \"${body[predicao]}\", \"pacienteId\": ${header.pacienteId}, \"exameId\": ${header.exameId}, \"medicoId\": ${header.medicoId}, \"tipoExame\": \"${header.tipoExame}\"}"))
                         .log("Novo JSON com resposta e pacienteId: ${body}")
 
                         .setHeader("Content-Type", constant("application/json"))
@@ -62,7 +63,7 @@ public class ExameDataRoute extends RouteBuilder {
                         .log("Resposta do serviço (Diabetes): ${body}")
 
                         .unmarshal().json()
-                        .setBody(simple("{\"resposta\": \"${body[prediction]}\", \"paciente_id\": ${header.pacienteId}, \"exame_id\": ${header.exameId}, \"medico_id\": ${header.medicoId}}"))
+                        .setBody(simple("{\"prediction\": \"${body[prediction]}\", \"paciente_id\": ${header.pacienteId}, \"exame_id\": ${header.exameId}, \"medico_id\": ${header.medicoId}}, \"tipoExame\": \"${header.tipoExame}\"}"))
                         .log("Novo JSON com resposta e pacienteId: ${body}")
 
                         .setHeader("Content-Type", constant("application/json"))

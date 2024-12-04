@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResultadoDTO {
-    private Long id;
+//    private Long id;
     private Long exameId;
 
     @JsonAlias({"predict", "prediction"})
