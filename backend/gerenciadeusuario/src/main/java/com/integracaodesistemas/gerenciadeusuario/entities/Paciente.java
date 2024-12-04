@@ -10,21 +10,22 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Paciente implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nome;
-    private LocalDate dataNascimento;
-    private String cpf;
-    private String endereco;
-    private String telefone;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
+  private String nome;
+  private LocalDate dataNascimento;
+  private String cpf;
+  private String email;
+  private String senha;
+  private String endereco;
+  private String telefone;
 }
-
-
