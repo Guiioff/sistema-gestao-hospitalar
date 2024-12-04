@@ -17,6 +17,7 @@ public class RemoveDadosProcessor implements Processor {
         body.remove("tipoExame");
         body.remove("pacienteId");
         body.remove("exameId");
+        body.remove("medicoId");
 
         String newJson = objectMapper.writeValueAsString(body);
         exchange.getIn().setBody(newJson);
