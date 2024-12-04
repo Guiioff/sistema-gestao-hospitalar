@@ -55,7 +55,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
 
 		<dependency>
 		    <groupId>org.mockito</groupId>
@@ -67,20 +66,9 @@
 		    <artifactId>mockito-junit-jupiter</artifactId>
 		    <scope>test</scope>
 		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.camel.springboot</groupId>
-		    <artifactId>camel-spring-boot-starter</artifactId>
-		    <version>3.20.6</version> 
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.camel</groupId>
-		    <artifactId>camel-rabbitmq</artifactId>
-		    <version>3.20.6</version> 
-		</dependency>
 
 		<dependency>
+<<<<<<< HEAD
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-amqp</artifactId>
 			<version>2.5.2</version>
@@ -91,7 +79,17 @@
 			<groupId>br.com.upe</groupId>
 			<artifactId>camelhub</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+=======
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+>>>>>>> 6e1f3055145a69dcd24cc3be036f20d903e5039c
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
